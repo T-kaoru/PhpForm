@@ -26,7 +26,7 @@ body {
 
 #sub_title {
     /*float: left;*/
-    font-size: 17px;
+    font-size: 18px;
     font-weight: bold;
     color: #555555;
     margin-left: 10px;
@@ -39,6 +39,12 @@ body {
     margin-left: 3px;
     color: #ffffff;
     font-size: 10px;
+}
+
+#desc {
+    margin-left: 12px;
+    font-size : 13px;
+    color: #333333;
 }
 
 #in_form {
