@@ -1,42 +1,74 @@
 body {
-  font-family: 'Mairyo UI', sans-serif;
-  margin: 0;
-  padding: 0;
-  color: #222222;
-  background: #fafff0;
-  margin: 0 auto;
-  width: 1000px;
+    font-family: 'SimHei', monospace, 'Meiryo UI';
+    margin: 0;
+    padding: 0;
+    color: #222222;
+    background: #fafff0;
+    margin: auto 20px;
+    padding: 20px 20px;
+    border-left: solid #aaaaaa 5px;
+    border-right: solid #aaaaaa 5px;
+    width: auto;
 }
 
 #form {
-  margin-left: 20px;
-  /*border-top-style: double;
-  border-bottom: double; */
-  border-bottom: 1px dotted #DDDDDD;
+    margin-left: 20px;
+    /*border-top-style: double;
+    border-bottom: double; */
+    border-bottom: 1px dotted #DDDDDD;
 }
 
 #title{
-  border-bottom: 7px groove #bbdd77;
-  padding-left: 5px;
-  padding-bottom: 5px;
+    border-bottom: 8px groove #bbdd77;
+    padding-left: 5px;
+    padding-bottom: 5px;
 }
 
 #sub_title {
-  font-weight: bold;
-  color: #555555;
-  margin-left: 10px;
+    /*float: left;*/
+    font-size: 17px;
+    font-weight: bold;
+    color: #555555;
+    margin-left: 10px;
+}
+
+#cns {
+    border-radius: 5px / 5px;
+    background-color: #ee6666;
+    padding: 2px;
+    margin-left: 3px;
+    color: #ffffff;
+    font-size: 10px;
 }
 
 #in_form {
-  float: none;;
-  margin-left: 30px;
-  line-height: 25px;
+    margin-top: 10px;
+    margin-left: 30px;
+    line-height: 25px;
 }
 
-.font_tables{
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0px;
-  border-top: 1px solid #ccc;
-  border-left: 1px solid #ccc;
+#messeages {
+    border-top: double 3px;
+    border-bottom: double 3px;
+    border-color: #99aa55;
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding-left: 5px;
 }
+
+#error_msg {
+    color: #cc3333;
+    margin: 10px;
+    border-left: dotted #779933 2px;
+    padding: 5px;
+    padding-left: 10px;
+}
+/*.font_tables{
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0px;
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+}*/
