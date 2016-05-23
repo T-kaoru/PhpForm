@@ -7,6 +7,7 @@
 </head>
 
 <body>
+    <div id="body">
     <?php
         // サニタイジング処理。一括処理を目的とした再起処理関数。
         function sany($a){
@@ -20,6 +21,7 @@
             }
             return $_data;
         }
+
         function error_echo($a){
             switch ($a) {
                 case 1:
@@ -36,6 +38,50 @@
             }
         }
         // var_dump($_POST);
+        //エラーチェックとエラー文出力PHP。OKだったら通過できる。
+        if( isset( $_POST['submit'] )){
+              $error = array();
+              $error_flg = 0;
+              //　nameチェック
+              if(!strlen($_POST['name1']) || !strlen($_POST['name2'])){
+                  $error['name'] = 1;
+              }
+              // 性別チェック
+              if(!strlen( $_POST['sexual'] )){
+                  $error['saxual'] = 1;
+              }
+              // mailアドレスチェック
+              if(!strlen($_POST['mail1']) || !strlen($_POST['mail2'])){
+                  $error['mail'] = 1;
+              }
+              // 郵便番号チェック
+              if(strlen($_POST['post1']) || strlen($_POST['post2'])){
+                  if(!strlen($_POST['post1'])){
+                      $error['post1'] = 1;
+                  }elseif(!strlen($_POST['post2'])){
+                      $error['post2'] = 1;
+                  }
+              }
+              //電話番号チェック
+              if(strlen($_POST['phone1']) || strlen($_POST['phone2']) || strlen($_POST['phone3'])){
+                  if(!strlen($_POST['phone1'])){
+                      $error['phone1'] = 1;
+                  }elseif(!strlen($_POST['phone2'])){
+                      $error['phone2'] = 1;
+                  }elseif(!strlen($_POST['phone3'])){
+                      $error['phone1'] = 1;
+                  }else{
+
+                  }
+              }
+              //エラーチェック判定。
+              foreach ($error as $key => $value) {
+                  if ($value > 0){
+                      $error_flg = 1;
+                      break;
+                  }
+              }
+          }
      ?>
   <h1 id="title">お問い合わせ 入力フォーム</h1>
 
@@ -46,38 +92,17 @@
               必須マーク付いてる部分は必ず入力しないと怒られます。
           </div>
           <?php
-          //エラーチェックとエラー文出力PHP。OKだったら通過できる。
-                if( isset( $_POST['submit'] )){
-                    echo '<div id="error_msg">';
-                    $error = array();
-                    $error_flg = 0;
-
-                    //nameチェック
-                    if(!strlen($_POST['name1']) || !strlen($_POST['name2'])){
-                        $error['name'] = 1;
-                    }
-                    if(!isset( $_POST['sexual'] )){
-                        $error['saxual'] = 1;
-                    }
-                    if(!strlen($_POST['mail1']) || !strlen($_POST['mail2'])){
-                        $error['mail'] = 1;
-                    }
-                    //エラーチェック判定。
-                    foreach ($error as $key => $value) {
-                        if ($value > 0){
-                            $error_flg = 1;
-                            break;
-                        }
-                    }
-                    if ( isset( $_POST['submit'] ) && $error_flg === 0 ){
-                        session_start();
-                        $_SESSION = sany($_POST);
+                if ( isset( $_POST['submit'] ) ){
+                    session_start();
+                    $_SESSION = sany($_POST);
+                    if ($error_flg === 0){
                         header("Location: ./result.php");
                         exit;
                     }else{
+                        echo '<div id="error_msg">';
                         echo "未入力、または入力に誤りがある項目があります！";
+                        echo '</div>';
                     }
-                    echo '</div>';
                 }
              ?>
         </p>
@@ -91,20 +116,13 @@
           <div class="desc">姓の欄に苗字、名の欄に名前を記入して下さい。</div>
       </div>
           <div class="in_form">
-            姓:<input type="textbox" name="name1" size="10" required placeholder="田中">
-            <?php
-                if( isset($_POST['submit']) && !strlen($_POST['name1'])){
-                    echo "ここ";
-                }
-             ?>
-            <!-- セイ<input type="textbox" name="kana1" size="6"　placeholder="タナカ"> -->
+            姓:<input type="textbox" name="name1" size="10" required placeholder="田中"
+            <?php if( isset($_SESSION['submit']) && strlen($_SESSION['name1'])){
+                echo "value=" . $_SESSION['name1']; } ?> >
         </br>
-            名:<input type="textbox" name="name2" size="10" required placeholder="太郎">
-            <?php
-                if( isset($_POST['submit']) && !strlen($_POST['name2'])){
-                    echo "ここ";
-                }
-            ?>
+            名:<input type="textbox" name="name2" size="10" required placeholder="太郎"
+            <?php if( isset($_SESSION['submit']) && strlen($_SESSION['name2'])){
+                echo "value=" . $_SESSION['name2']; } ?> >
             <!-- メイ<input type="textbox" name="kana2" size="6" placeholder="タロウ"> -->
           </div>
         </p>
@@ -114,12 +132,18 @@
       <div class="form">
         <p>
           <div class="sub_title">性別<span class="cns">必須</span>
-          <div class="desc">性別に違和感のある方や、無性生物の方は「不明」を選択して下さい。</div>
+          <div class="desc">性別に違和感のある方などは「不明」を選択して下さい。</div>
       </div>
           <div class="in_form">
-            <input type="radio" name="sexual" id="sexual1" value="男" /><label for="sexual1">:男</lavel>
-            <input type="radio" name="sexual" id="sexual2" value="女" /><label for="sexual2">:女</lavel>
-            <input type="radio" name="sexual" id="sexual3" value="不明" required /><label for="sexual3">:不明</lavel>
+            <input type="radio" name="sexual" id="sexual1" value="男性"
+            <?php if( isset($_SESSION['submit']) && $_SESSION['sexual'] === "男性"){
+            echo "checked"; } ?> /><label for="sexual1">:男性</lavel>
+            <input type="radio" name="sexual" id="sexual2" value="女性"　
+            <?php if( isset($_SESSION['submit']) && $_SESSION['sexual'] === "女性"){
+            echo "checked"; } ?> /><label for="sexual2">:女</lavel>
+            <input type="radio" name="sexual" id="sexual3" value="不明"
+            <?php if( isset($_SESSION['submit']) && $_SESSION['sexual'] === "不明"){
+            echo "checked"; } ?> /><label for="sexual3">:不明</lavel>
                 <?php
                     if( isset($_POST['submit']) && !strlen($_POST['name2'])){
                         echo "両性だった？";
@@ -135,8 +159,12 @@
           <div class="sub_title">郵便番号</br>
           <div class="desc">3ケタ、4ケタの数字をそれぞれ入力してください。</div></div>
           <div class="in_form">
-            <input type="textbox" name="post1" size="1" pattern="\d{3}" placeholder="100">
-            - <input type="textbox" name="post2" size="1" pattern="\d{4}" placeholder="0005">
+            <input type="textbox" name="post1" size="1" pattern="\d{3}" placeholder="100"
+            <?php if( isset($_SESSION['submit']) && strlen($_SESSION['post1'])){
+            echo "value=" . $_SESSION['post1']; } ?> >
+            - <input type="textbox" name="post2" size="1" pattern="\d{4}" placeholder="0005"
+            <?php if( isset($_SESSION['submit']) && strlen($_SESSION['post2'])){
+            echo "value=" . $_SESSION['post2']; } ?> >
           </div>
           <div class="nonline_form">
               <div class="to_float"></div>
@@ -145,8 +173,10 @@
           </div>
               <div class="in_form">
                   <input type="textbox" name="address" size="70"
-                  placeholder="東京都千代田区丸の内1-8-3 丸の内トラストタワー本館5階">
-              </div>
+                  placeholder="東京都千代田区丸の内1-8-3 丸の内トラストタワー本館5階"
+                  <?php if( isset($_SESSION['submit']) && strlen($_SESSION['address'])){
+                      echo "value=" . $_SESSION['address']; } ?>>
+            </div>
           </p>
         </div>
     </div>
@@ -158,9 +188,15 @@
           <div class="desc">適切なケタ数の数字のみで入力してください。</div>
       </div>
           <div class="in_form">
-            <input type="textbox" name="phone1" size="1" pattern="\d{2,4}" placeholder="03">
-            ( <input type="textbox" name="phone2" size="1" pattern="\d{3,4}" placeholder="3286">
-            ) <input type="textbox" name="phone3" size="1" pattern="\d{3,4}" placeholder="7887">
+            <input type="textbox" name="phone1" size="1" pattern="\d{2,4}" placeholder="03"
+            <?php if( isset($_SESSION['submit']) && strlen($_SESSION['phone1'])){
+            echo "value=" . $_SESSION['phone1']; } ?>>
+            ( <input type="textbox" name="phone2" size="1" pattern="\d{3,4}" placeholder="3286"
+            <?php if( isset($_SESSION['submit']) && strlen($_SESSION['phone2'])){
+            echo "value=" . $_SESSION['phone2']; } ?>>
+            ) <input type="textbox" name="phone3" size="1" pattern="\d{3,4}" placeholder="7887"
+            <?php if( isset($_SESSION['submit']) && strlen($_SESSION['phone3'])){
+            echo "value=" . $_SESSION['phone3']; } ?>>
           </div>
         </p>
       </div>
@@ -172,19 +208,12 @@
           <div class="desc">@(あっとまーく)区切りでご記入下さい。</div>
       </div>
           <div class="in_form">
-            <input type="textbox" name="mail1" size="20" required placeholder="sample">
-            @ <input type="textbox" name="mail2" size="20" required placeholder="example.com">
-            <?php
-                if( isset($_POST['submit'])){
-                    if(!strlen($_POST['mail1']) && !strlen($_POST['mail2'])){
-                        echo "ヨロシク＾＾";
-                    }elseif(!strlen($_POST['mail1'])){
-                        echo "ホスト名ないんだけど？？？";
-                    }elseif(!strlen($_POST['mail2'])){
-                        echo "ドメイン名おかしくね？？？";
-                    }
-                }
-            ?>
+            <input type="textbox" name="mail1" size="20" required placeholder="sample"
+            <?php if( isset($_SESSION['submit']) && strlen($_SESSION['mail1'])){
+            echo "value=" . $_SESSION['mail2']; } ?>>
+            @ <input type="textbox" name="mail2" size="20" required placeholder="example.com"
+            <?php if( isset($_SESSION['submit']) && strlen($_SESSION['mail2'])){
+            echo "value=" . $_SESSION['mail2']; } ?>>
           </div>
         </p>
       </div>
@@ -197,9 +226,9 @@
           <div class="desc">(複数回答可)</div>
         </div>
           <div class="in_form">
-            <input type="checkbox" name="box" id="box1" value="box1"><label for="box1">: 眠かった</lavel>
-            <input type="checkbox" name="box" id="box2" value="box2"><label for="box2">: 疲れた</lavel>
-            <input type="checkbox" name="box" id="box3" value="box3"><label for="box3">: お腹減った</lavel>
+            <input type="checkbox" name="box[]" id="box1" value="1"><label for="box1">: 眠かった</lavel>
+            <input type="checkbox" name="box[]" id="box2" value="2"><label for="box2">: 疲れた</lavel>
+            <input type="checkbox" name="box[]" id="box3" value="3"><label for="box3">: お腹減った</lavel>
           </div>
         </p>
       </div>
@@ -212,7 +241,7 @@
         </div>
             <div class="in_form">
               <select name="select" required>
-                  <option value="select0">-- 選択してください --</option>
+                <option value="select0">-- 選択してください --</option>
                 <option value="select1">いい子だねー</option>
                 <option value="select2">いい子でちゅね～</option>
                 <option value="select3">ｱｰ、ﾖｼﾖｼﾖｼ</option>
@@ -224,7 +253,9 @@
             <div class="desc">1000文字以内でご記入下さい。</div>
         </div>
             <div class="in_form">
-                <textarea cols="80" rows="15" name="textarea" required placeholder="ご意見、ご感想をお聞かせください。"></textarea>
+                <textarea cols="80" rows="15" name="textarea" required placeholder="ご意見、ご感想をお聞かせください。"><?php
+                if( isset($_SESSION['submit']) && strlen($_SESSION['textarea'])){
+                echo "value=" . $_SESSION['textarea']; } ?></textarea>
             </div>
             </p>
       </div>
@@ -239,5 +270,5 @@
       </div>
     </form>
 
-
+    </div>
   </body>
