@@ -20,7 +20,7 @@
             }
             return $_data;
         }
-        function error_check($a){
+        function error_echo($a){
             switch ($a) {
                 case 1:
                     echo "未入力です";
@@ -39,7 +39,7 @@
      ?>
   <h1 id="title">お問い合わせ 入力フォーム</h1>
 
-  <div id="messeages">
+  <div class="messeages">
       <p>
           <div id="default_msg">
               意見ください。お願いします。</br>
@@ -69,7 +69,7 @@
                             break;
                         }
                     }
-                    if ( $error_flg === 0 ){
+                    if ( isset( $_POST['submit'] ) && $error_flg === 0 ){
                         session_start();
                         $_SESSION = sany($_POST);
                         header("Location: ./result.php");
@@ -85,10 +85,12 @@
 
 <!--名前入力フォーム  -->
     <form action="contact.php" method="post">
-      <div id="form">
+      <div class="form">
         <p>
-          <class id="sub_title">お名前</class><class id="cns">必須</class></br>
-          <div id="in_form">
+          <div class="sub_title">お名前<span class="cns">必須</span>
+          <div class="desc">姓の欄に苗字、名の欄に名前を記入して下さい。</div>
+      </div>
+          <div class="in_form">
             姓:<input type="textbox" name="name1" size="10" required placeholder="田中">
             <?php
                 if( isset($_POST['submit']) && !strlen($_POST['name1'])){
@@ -96,7 +98,7 @@
                 }
              ?>
             <!-- セイ<input type="textbox" name="kana1" size="6"　placeholder="タナカ"> -->
-          </br>
+        </br>
             名:<input type="textbox" name="name2" size="10" required placeholder="太郎">
             <?php
                 if( isset($_POST['submit']) && !strlen($_POST['name2'])){
@@ -109,10 +111,12 @@
       </div>
 
   <!-- 性別入力フォーム -->
-      <div id="form">
+      <div class="form">
         <p>
-          <class id="sub_title">性別</class><class id="cns">必須</class>
-          <div id="in_form">
+          <div class="sub_title">性別<span class="cns">必須</span>
+          <div class="desc">性別に違和感のある方や、無性生物の方は「不明」を選択して下さい。</div>
+      </div>
+          <div class="in_form">
             <input type="radio" name="sexual" id="sexual1" value="男" /><label for="sexual1">:男</lavel>
             <input type="radio" name="sexual" id="sexual2" value="女" /><label for="sexual2">:女</lavel>
             <input type="radio" name="sexual" id="sexual3" value="不明" required /><label for="sexual3">:不明</lavel>
@@ -126,28 +130,34 @@
       </div>
 
       <!-- 住所入力フォーム  -->
-      <div id="form">
+      <div class="form">
         <p>
-          <class id="sub_title">郵便番号</class></br>
-          <class id="desc">3ケタ、4ケタの数字をそれぞれ入力してください。</class>
-          <div id="in_form">
+          <div class="sub_title">郵便番号</br>
+          <div class="desc">3ケタ、4ケタの数字をそれぞれ入力してください。</div></div>
+          <div class="in_form">
             <input type="textbox" name="post1" size="1" pattern="\d{3}" placeholder="100">
             - <input type="textbox" name="post2" size="1" pattern="\d{4}" placeholder="0005">
           </div>
-          </br>
-          <class id="sub_title">住所</class>
-          <div id="in_form">
-            <input type="textbox" name="address" size="70"
-             placeholder="東京都千代田区丸の内1-8-3 丸の内トラストタワー本館5階">
+          <div class="nonline_form">
+              <div class="to_float"></div>
+              <div class="sub_title">住所
+              <div class="desc">現在お住まいの住所をご記入下さい。</div>
           </div>
-        </p>
-      </div>
+              <div class="in_form">
+                  <input type="textbox" name="address" size="70"
+                  placeholder="東京都千代田区丸の内1-8-3 丸の内トラストタワー本館5階">
+              </div>
+          </p>
+        </div>
+    </div>
 
       <!-- 電話番号入力フォーム  -->
-      <div id="form">
+      <div class="form">
         <p>
-          <class id="sub_title">電話番号</class>
-          <div id="in_form">
+          <div class="sub_title">電話番号
+          <div class="desc">適切なケタ数の数字のみで入力してください。</div>
+      </div>
+          <div class="in_form">
             <input type="textbox" name="phone1" size="1" pattern="\d{2,4}" placeholder="03">
             ( <input type="textbox" name="phone2" size="1" pattern="\d{3,4}" placeholder="3286">
             ) <input type="textbox" name="phone3" size="1" pattern="\d{3,4}" placeholder="7887">
@@ -156,10 +166,12 @@
       </div>
 
       <!-- メールアドレス入力フォーム  -->
-      <div id="form">
+      <div class="form">
         <p>
-          <class id="sub_title">メールアドレス</class><class id="cns">必須</class>
-          <div id="in_form">
+          <div class="sub_title">メールアドレス<span class="cns">必須</span>
+          <div class="desc">@(あっとまーく)区切りでご記入下さい。</div>
+      </div>
+          <div class="in_form">
             <input type="textbox" name="mail1" size="20" required placeholder="sample">
             @ <input type="textbox" name="mail2" size="20" required placeholder="example.com">
             <?php
@@ -178,12 +190,13 @@
       </div>
 
       <!-- クレーム内容入力フォーム  -->
-      <div id="form">
+      <div class="form">
         <p>
-          <class id="sub_title">
-            よろしければ、どの点にご不満があったのかお聞かせください(複数回答可)
-          </class>
-          <div id="in_form">
+          <div class="sub_title">ご不満など
+          <div class="desc">当てはまるものを選択してください。</div>
+          <div class="desc">(複数回答可)</div>
+        </div>
+          <div class="in_form">
             <input type="checkbox" name="box" id="box1" value="box1"><label for="box1">: 眠かった</lavel>
             <input type="checkbox" name="box" id="box2" value="box2"><label for="box2">: 疲れた</lavel>
             <input type="checkbox" name="box" id="box3" value="box3"><label for="box3">: お腹減った</lavel>
@@ -192,10 +205,12 @@
       </div>
 
       <!-- 質問カテゴリ入力フォーム  -->
-      <div id="form">
+      <div class="form">
           <p>
-            <class id="sub_title">どういった用件での問い合わせかね</class><class id="cns">必須</class>
-            <div id="in_form">
+            <div class="sub_title">ご用件<span class="cns">必須</span>
+            <div class="desc">用件の内容を選択して下さい。</div>
+        </div>
+            <div class="in_form">
               <select name="select" required>
                   <option value="select0">-- 選択してください --</option>
                 <option value="select1">いい子だねー</option>
@@ -203,20 +218,23 @@
                 <option value="select3">ｱｰ、ﾖｼﾖｼﾖｼ</option>
               </select>
             </div>
-          </br>
-            <class id="sub_title">書いてねー。</class><class id="cns">必須</class>
-            <div id="in_form">
-              <textarea cols="80" rows="15" name="textarea" required placeholder="ご意見、ご感想をお聞かせください。"></textarea>
+          <div class="to_float"></div>
+      </br>
+            <div class="sub_title">ご意見ボックス<span class="cns">必須</span>
+            <div class="desc">1000文字以内でご記入下さい。</div>
+        </div>
+            <div class="in_form">
+                <textarea cols="80" rows="15" name="textarea" required placeholder="ご意見、ご感想をお聞かせください。"></textarea>
             </div>
-          </p>
+            </p>
       </div>
 
       <!-- フォーム送信用ボタン -->
-      <div id="form">
+      <div class="form">
         <p>
-          <div id="in_form">
+          <div class="in_form">
             <input type="submit" name="submit" value="押せっ・・・！">
-          </div>
+        </div>
         </p>
       </div>
     </form>

@@ -23,7 +23,7 @@
 <!--名前入力フォーム  -->
       <div id="form">
         <p>
-          <class id="sub_title">お名前</class>
+          <class="sub_title">お名前</class>
           <div id="in_form">
             <?php echo $data['name1'] . " " . $data['name2']; ?>
           </div>
@@ -33,7 +33,7 @@
   <!-- 性別入力フォーム -->
       <div id="form">
         <p>
-          <class id="sub_title">性別</class>
+          <class="sub_title">性別</class>
           <div id="in_form">
             <?php echo $data['sexual'] ?>
           </div>
@@ -43,7 +43,7 @@
       <!-- 住所入力フォーム  -->
       <div id="form">
         <p>
-          <class id="sub_title">ご住所</class>
+          <class="sub_title">ご住所</class>
           <div id="in_form">
             <?php
                 // if( echo "〒 " . $data['post1'] . "-" . $data['post2'] ?>
@@ -55,7 +55,7 @@
       <!-- 電話番号入力フォーム  -->
       <div id="form">
         <p>
-          <class id="sub_title">電話番号</class>
+          <class="sub_title">電話番号</class>
           <div id="in_form">
             <?php echo $data['phone1'] . $data['phone2'] . $data['phone3'] ?>
           </div>
@@ -65,7 +65,7 @@
       <!-- メールアドレス入力フォーム  -->
       <div id="form">
         <p>
-          <class id="sub_title">メールアドレス</class>
+          <class="sub_title">メールアドレス</class>
           <div id="in_form">
             <?php echo $data['mail1'] . "@" . $data['mail2'] ?>
           </div>
@@ -75,7 +75,7 @@
       <!-- クレーム内容入力フォーム  -->
       <div id="form">
         <p>
-          <class id="sub_title">
+          <class="sub_title">
             よろしければ、どの点にご不満があったのかお聞かせください(複数回答可)
           </class>
           <div id="in_form">
@@ -87,12 +87,12 @@
       <!-- 質問カテゴリ入力フォーム  -->
       <div id="form">
           <p>
-            <class id="sub_title">どういった用件での問い合わせかね</class>
+            <class="sub_title">どういった用件での問い合わせかね</class>
             <div id="in_form">
               <?php echo $data['select'] ?>
             </div>
           </br>
-            <class id="sub_title">書いてねー。</class>
+            <class="sub_title">書いてねー。</class>
             <div id="in_form">
               <?php echo $data['textarea'] ?>
             </div>
