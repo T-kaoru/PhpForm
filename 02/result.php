@@ -7,6 +7,7 @@
 </head>
 
 <body>
+    <div id="body">
     <?php
         //セッション呼び出し
         session_start();
@@ -115,5 +116,5 @@
       </div>
     </form>
 
-
+</div>
   </body>

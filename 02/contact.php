@@ -16,7 +16,7 @@
                 if (is_array($value)) {
                     $_data[$key] = sany($value);
                 }else{
-                    $_data[$key] = htmlspecialchars($value);
+                    $_data[$key] = htmlspecialchars($value, ENT_QUOTES);
                 }
             }
             return $_data;
@@ -69,10 +69,14 @@
                   }elseif(!strlen($_POST['phone2'])){
                       $error['phone2'] = 1;
                   }elseif(!strlen($_POST['phone3'])){
-                      $error['phone1'] = 1;
+                      $error['phone3'] = 1;
                   }else{
 
                   }
+              }
+              //ご用件チェック
+              if(strlen($_POST['select']) === "non_select"){
+                  $error['select'] = 1;
               }
               //エラーチェック判定。
               foreach ($error as $key => $value) {
@@ -172,7 +176,7 @@
               <div class="desc">現在お住まいの住所をご記入下さい。</div>
           </div>
               <div class="in_form">
-                  <input type="textbox" name="address" size="70"
+                  <input type="textbox" name="address" size="65"
                   placeholder="東京都千代田区丸の内1-8-3 丸の内トラストタワー本館5階"
                   <?php if( isset($_SESSION['submit']) && strlen($_SESSION['address'])){
                       echo "value=" . $_SESSION['address']; } ?>>
@@ -226,9 +230,15 @@
           <div class="desc">(複数回答可)</div>
         </div>
           <div class="in_form">
-            <input type="checkbox" name="box[]" id="box1" value="1"><label for="box1">: 眠かった</lavel>
-            <input type="checkbox" name="box[]" id="box2" value="2"><label for="box2">: 疲れた</lavel>
-            <input type="checkbox" name="box[]" id="box3" value="3"><label for="box3">: お腹減った</lavel>
+            <input type="checkbox" name="box[]" id="box1" value="box0"
+            <?php if( isset($_SESSION['submit']) && isset($_SESSION['box'][0])){
+            echo "checked";} ?> ><label for="box1">: 眠かった</lavel>
+            <input type="checkbox" name="box[]" id="box2" value="1"
+            <?php if( isset($_SESSION['submit']) && isset($_SESSION['box'][1])){
+            echo "checked";} ?> ><label for="box2">: 疲れた</lavel>
+            <input type="checkbox" name="box[]" id="box3" value="2"
+            <?php if( isset($_SESSION['submit']) && isset($_SESSION['box'][2])){
+            echo "checked";} ?> ><label for="box3">: お腹減った</lavel>
           </div>
         </p>
       </div>
@@ -241,10 +251,16 @@
         </div>
             <div class="in_form">
               <select name="select" required>
-                <option value="select0">-- 選択してください --</option>
-                <option value="select1">いい子だねー</option>
-                <option value="select2">いい子でちゅね～</option>
-                <option value="select3">ｱｰ、ﾖｼﾖｼﾖｼ</option>
+                <option value="non_select"></option>
+                <option value="select1"
+                <?php if( isset($_SESSION['submit']) && ($_SESSION['select'] == "select1")){
+                    echo "selected"; } ?> >いい子だねー</option>
+                <option value="select2"
+                <?php if( isset($_SESSION['submit']) && ($_SESSION['select'] === "select2")){
+                    echo "selected"; } ?> >いい子でちゅね～</option>
+                <option value="select3"
+                <?php if( isset($_SESSION['submit']) && ($_SESSION['select'] === "select3")){
+                    echo "selected"; } ?> >ｱｰ、ﾖｼﾖｼﾖｼ</option>
               </select>
             </div>
           <div class="to_float"></div>
@@ -253,9 +269,9 @@
             <div class="desc">1000文字以内でご記入下さい。</div>
         </div>
             <div class="in_form">
-                <textarea cols="80" rows="15" name="textarea" required placeholder="ご意見、ご感想をお聞かせください。"><?php
+                <textarea cols="65" rows="15" name="textarea" required placeholder="ご意見、ご感想をお聞かせください。"><?php
                 if( isset($_SESSION['submit']) && strlen($_SESSION['textarea'])){
-                echo "value=" . $_SESSION['textarea']; } ?></textarea>
+                echo $_SESSION['textarea']; } ?></textarea>
             </div>
             </p>
       </div>
@@ -263,7 +279,7 @@
       <!-- フォーム送信用ボタン -->
       <div class="form">
         <p>
-          <div class="in_form">
+          <div class="button">
             <input type="submit" name="submit" value="押せっ・・・！">
         </div>
         </p>
