@@ -29,6 +29,7 @@ body {
     border-bottom: solid #aaaaaa 2px;
     border-left: solid #aaaaaa 5px;
     border-right: solid #aaaaaa 5px;
+    border-radius: 15px 15px;
 }
 
 .form {
@@ -52,6 +53,7 @@ body {
     font-size: 18px;
     font-weight: bold;
     color: #555555;
+    margin-top: 5px;
     margin-left: 10px;
     margin-bottom: 15px;
     white-space: nowrap;
@@ -123,6 +125,14 @@ body {
     clear: both;
     visibility: hidden;
 }
+
+textarea {
+    resize: vertical;
+    max-height: 500px;
+}
+ .test {
+     display: table;
+ }
 /*.font_tables{
     width: 100%;
     border-collapse: separate;
