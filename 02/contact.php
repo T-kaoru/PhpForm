@@ -9,6 +9,9 @@
 <body>
     <div id="body">
     <?php
+        //Noticeエラー回避
+        error_reporting(E_ALL & ~E_NOTICE);
+
         // サニタイジング処理。一括処理を目的とした再起処理関数。
         function sany($a){
             $_data = array();
@@ -30,18 +33,22 @@
         }
         //エラーメッセージ用関数
         function error_echo($a){
-            switch ($a) {
-                case 1:
-                    echo "未入力です";
-                    break;
-                case 2:
-                    echo "不正な値です";
-                    break;
-                case 3:
-                    echo "は？";
-                    break;
-                default:
-                    break;
+            if(isset($_SESSION['submit'])){
+                echo '<div class="error_submsg">';
+                switch ($a) {
+                    case 1:
+                        echo '<style>background-color: #000000;</style>';
+                        break;
+                    case 2:
+                        echo "不正な値です";
+                        break;
+                    case 3:
+                        echo "は？";
+                        break;
+                    default:
+                        break;
+                }
+                echo "</div>";
             }
         }
         // 入力省略用関数
@@ -65,27 +72,29 @@
               // 郵便番号チェック
               if(strlen($_POST['post1']) || strlen($_POST['post2'])){
                   if(!strlen($_POST['post1'])){
-                      $error['post1'] = 1;
+                      $error['post'] = 1;
                   }elseif(!strlen($_POST['post2'])){
-                      $error['post2'] = 1;
+                      $error['post'] = 1;
                   }
               }
               //電話番号チェック
               if(strlen($_POST['phone1']) || strlen($_POST['phone2']) || strlen($_POST['phone3'])){
                   if(!strlen($_POST['phone1'])){
-                      $error['phone1'] = 1;
+                      $error['phone'] = 1;
                   }elseif(!strlen($_POST['phone2'])){
-                      $error['phone2'] = 1;
+                      $error['phone'] = 1;
                   }elseif(!strlen($_POST['phone3'])){
-                      $error['phone3'] = 1;
+                      $error['phone'] = 1;
                   }else{
 
                   }
               }
               //ご用件チェック
-              if(strlen($_POST['select']) === "non_select"){
+              if( $_POST['select'] == 0){
                   $error['select'] = 1;
               }
+
+              var_dump($error);
               //エラーチェック判定。
               foreach ($error as $key => $value) {
                   if ($value > 0){
@@ -111,7 +120,7 @@
                         header("Location: ./result.php");
                         exit;
                     }else{
-                        echo '<div id="error_msg">';
+                        echo '<div class="error_msg">';
                         echo "未入力、または入力に誤りがある項目があります！";
                         echo '</div>';
                     }
@@ -195,13 +204,14 @@
 
       <!-- 電話番号入力フォーム  -->
       <div class="form">
+          <?php error_echo($error['phone']); ?>
         <p>
           <div class="sub_title">電話番号
           <div class="desc">適切なケタ数の数字のみで入力してください。
-          <?php error_echo(1); ?></div>
+          </div>
       </div>
           <div class="in_form">
-            <input type="textbox" name="phone1" size="1" pattern="\d{2,4}" maxlength="4" placeholder="03"
+            <input type="textbox" name="phone1" size="1" pattern="^([0-9]{2,4})$)" maxlength="4" placeholder="03"
             <?php if( isset($_SESSION['submit']) && strlen($_SESSION['phone1'])){
             echo "value=" . $_SESSION['phone1']; } ?>>
             ( <input type="textbox" name="phone2" size="1" pattern="\d{3,4}" maxlength="4" placeholder="3286"

@@ -8,13 +8,28 @@
 <body>
     <div id="body">
     <?php
+        //Noticeエラー回避
+        error_reporting(E_ALL & ~E_NOTICE);
+
         //セッション呼び出し
         session_start();
-        $data = array();
-        foreach ($_SESSION as $key => $value) {
-            $data[$key] = $value;
+
+        //念押し
+        function sany($a){
+            $_data = array();
+            foreach ($a as $key => $value) {
+                if (is_array($value)) {
+                    $_data[$key] = sany($value);
+                }else{
+                    $_data[$key] = htmlspecialchars($value, ENT_QUOTES);
+                }
+            }
+            return $_data;
         }
 
+        $data = sany($_SESSION);
+
+        //
         $val = array(
             'sexual' => array(
                 "男性", "女性", "不明"),
@@ -24,6 +39,22 @@
                 "null", "いい子だねー", "いい子でちゅね～", "ｱｰ、ﾖｼﾖｼﾖｼ")
             );
         $data['textarea'] = nl2br($data['textarea']);
+
+        //ログ書き出し
+        function output($a){
+            $puttin = array();
+            foreach ($a as $key => $value) {
+                if (is_array($value)) {
+                    $puttin[$key] = output($value);
+                }else{
+                    $output = $key . "  " . $value . "\n";
+                    file_put_contents( "log.txt", $output, FILE_APPEND);
+                }
+            }
+        }
+
+        file_put_contents("log.txt", "---------------------------------\n", FILE_APPEND);
+        output($data);
 
      ?>
     <h1 id="title">お問い合わせ 内容確認</h1>
@@ -122,7 +153,7 @@
           </br>
             <div class="sub_title">ご意見</div>
             <div class="in_form">
-            <div class="test">
+            <div id="textarea_put">
               <?php echo $data['textarea'] ?>
             </div>
             </div>
@@ -132,7 +163,7 @@
       <!-- フォーム送信用ボタン -->
       <div class="form">
         <p>
-          <div class="in_form">
+            <div class="button">
             <input type="submit" name="submit" value="ｧ(^｡^)！" onclick="history.back()">
           </div>
         </p>
@@ -140,4 +171,5 @@
     </form>
 
 </div>
+
   </body>

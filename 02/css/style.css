@@ -34,7 +34,7 @@ body {
 
 .form {
     margin-left: 20px;
-    margin-bottom: 15px;
+    padding-bottom: 10px;
     /*border-top-style: double;
     border-bottom: double; */
     border-top: 1px dotted #DDDDDD;
@@ -86,11 +86,6 @@ body {
     line-height: 25px;
 }
 
-.button {
-    text-align: right;
-    margin-right: 100px;
-}
-
 .messeages {
     border-top: double 3px;
     border-bottom: double 3px;
@@ -102,12 +97,19 @@ body {
     padding-left: 5px;
 }
 
-#error_msg {
+.error_msg {
     color: #cc3333;
     margin: 10px;
     border-left: dotted #779933 2px;
     padding: 5px;
     padding-left: 10px;
+}
+
+.error_submsg {
+    color: #cc3333;
+    font-size: 15px;
+    font-weight: normal;
+    text-align: center;
 }
 
 .form:after {
@@ -130,7 +132,17 @@ textarea {
     resize: vertical;
     max-height: 500px;
 }
- .test {
+
+.button{
+    text-align: center;
+}
+input[type="submit"] {
+    background: rgba(230, 230, 230, 0.5);
+    padding: 10px 50px;
+    border-style: groove;
+}
+
+ #textarea_put {
      display: table;
  }
 /*.font_tables{
