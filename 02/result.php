@@ -28,7 +28,7 @@
         }
 
         $data = sany($_SESSION);
-        var_dump($data);
+        // var_dump($data);
         //
         $val = array(
             'sexual' => array(
@@ -84,9 +84,21 @@
         <p>
           <div class="sub_title">ご住所</div>
           <div class="in_form">
-            <?php echo "〒 " . $data['post1'] . "-" . $data['post2']; ?>
+            <?php
+                if( !empty($data['post1'])){
+                    echo "〒 " . $data['post1'] . "-" . $data['post2'];
+                }else{
+                    echo "(未記入)";
+                }
+            ?>
         </br>
-            <?php echo $data['address']; ?>
+            <?php
+                if( !empty($data['address'])){
+                    echo $data['address'];;
+                }else{
+                    echo "(未記入)";
+                }
+            ?>
           </div>
         </p>
       </div>

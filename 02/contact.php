@@ -28,11 +28,27 @@
 
         // textbox用繰り返し表示関数。
         // ページが更新されても入力値を残す。
-        function textset($a){
-        if(isset($_SESSION['submit']) && strlen($a)){
+        function re_textbox($a){
+            if(isset($_SESSION['submit']) && strlen($a)){
                 echo "value=" . $a;
             }
         }
+        // radio用繰り返し選択関数。
+        function re_checked($a, $b){
+            if($a == $_SESSION[$b]){
+                echo "checked";
+            }
+        }
+        // checkbox用繰り返し選択関数。
+
+        // select用繰り返し選択関数。
+        function re_select($a){
+            if( $a == $_SESSION['select']){
+                echo "selected";
+            }
+        }
+
+
 
         // エラーによる要素カラーペイント関数。
         // 問題のある入力箇所はボーダーで囲われる。
@@ -56,7 +72,7 @@
         );
 
         // エラーチェックとエラー文出力PHP。OKだったら通過できる。
-        // ダメだったらerror_flgにビットが経つ。
+        // ダメだったらerror_flgにビットが経つ。時間があれば二次元配列使いたかった。
         if( isset( $_POST['submit'] )){
             $error = array();
               $error_flg = 0;
@@ -76,25 +92,25 @@
                   $error['mail'] = 3;
               }
               // 郵便番号チェック
-              if(strlen($_POST['post1']) || strlen($_POST['post2'])){
-                  if(!strlen($_POST['post1'])){
-                      $error['post'] = 1;
-                  }elseif(!strlen($_POST['post2'])){
-                      $error['post'] = 1;
+              if(strlen($_POST['post1']) && strlen($_POST['post2'])){
+                  if(!preg_match('/^[0-9]+$/', $_POST['post1']) || !preg_match('/^[0-9]+$/', $_POST['post2'])){
+                      $error['post'] = 3;
                   }
+              }else{
+                  if(strlen($_POST['post1']) || strlen($_POST['post2']))
+                  $error['post'] = 1;
               }
-              //電話番号チェック
-              if(strlen($_POST['phone1']) || strlen($_POST['phone2']) || strlen($_POST['phone3'])){
-                  if(!strlen($_POST['phone1'])){
-                      $error['phone'] = 1;
-                  }elseif(!strlen($_POST['phone2'])){
-                      $error['phone'] = 1;
-                  }elseif(!strlen($_POST['phone3'])){
-                      $error['phone'] = 1;
-                  }else{
 
+              //電話番号チェック
+              if(strlen($_POST['phone1']) && strlen($_POST['phone2']) && strlen($_POST['phone3'])){
+                  if(!preg_match('/^[0-9]+$/', $_POST['phone1']) || !preg_match('/^[0-9]+$/', $_POST['phone2']) || !preg_match('/^[0-9]+$/', $_POST['phone3'])){
+                      $error['phone'] = 3;
                   }
+              }else{
+                  if(strlen($_POST['phone1']) || strlen($_POST['phone2']) || strlen($_POST['phone3']))
+                  $error['phone'] = 1;
               }
+
               //ご用件チェック
               if( $_POST['select'] == 0){
                   $error['select'] = 2;
@@ -108,7 +124,7 @@
                   }
               }
           }
-          var_dump($error);
+        //   var_dump($error);
      ?>
   <h1 id="title">お問い合わせ 入力フォーム</h1>
 
@@ -159,10 +175,10 @@
         </div>
           <div class="in_form">
             姓:<input type="textbox" name="name1" size="10" required placeholder="田中"
-            <?php textset($_SESSION['name1']) ?> >
+            <?php re_textbox($_SESSION['name1']) ?> >
         </br>
             名:<input type="textbox" name="name2" size="10" required placeholder="太郎"
-            <?php textset($_SESSION['name2']) ?> >
+            <?php re_textbox($_SESSION['name2']) ?> >
             <!-- メイ<input type="textbox" name="kana2" size="6" placeholder="タロウ"> -->
           </div>
         </p>
@@ -175,15 +191,9 @@
           <div class="desc">性別に違和感のある方などは「不明」を選択して下さい。</div>
       </div>
           <div class="in_form">
-            <input type="radio" name="sexual" id="sexual1" value=0
-            <?php if( isset($_SESSION['submit']) && $_SESSION['sexual'] == 0){
-            echo "checked"; } ?> /><label for="sexual1">:男性</lavel>
-            <input type="radio" name="sexual" id="sexual2" value=1
-            <?php if( isset($_SESSION['submit']) && $_SESSION['sexual'] == 1){
-            echo "checked"; } ?> /><label for="sexual2">:女性</lavel>
-            <input type="radio" name="sexual" id="sexual3" value=2
-            <?php if( isset($_SESSION['submit']) && $_SESSION['sexual'] == 2){
-            echo "checked"; } ?> /><label for="sexual3">:不明</lavel>
+            <input type="radio" name="sexual" id="sexual1" value=0 <?php re_checked(0, "sexual"); ?> /><label for="sexual1">:男性</lavel>
+            <input type="radio" name="sexual" id="sexual2" value=1 <?php re_checked(1, "sexual"); ?> /><label for="sexual2">:女性</lavel>
+            <input type="radio" name="sexual" id="sexual3" value=2 <?php re_checked(2, "sexual"); ?> /><label for="sexual3">:不明</lavel>
           </div>
         </p>
       </div>
@@ -195,9 +205,9 @@
           <div class="desc">3ケタ、4ケタの数字をそれぞれ入力してください。</div></div>
           <div class="in_form">
             <input type="textbox" name="post1" size="1" pattern="\d{3}" maxlength="3" placeholder="100"
-            <?php textset($_SESSION['post1']) ?> >
+            <?php re_textbox($_SESSION['post1']) ?> >
             - <input type="textbox" name="post2" size="1" pattern="\d{4}" maxlength="4" placeholder="0005"
-            <?php textset($_SESSION['post2']) ?> >
+            <?php re_textbox($_SESSION['post2']) ?> >
           </div>
           <div class="nonline_form">
               <div class="to_float"></div>
@@ -207,7 +217,7 @@
               <div class="in_form">
                   <input type="textbox" name="address" size="65"
                   placeholder="東京都千代田区丸の内1-8-3 丸の内トラストタワー本館5階"
-                  <?php textset($_SESSION['address']) ?>>
+                  <?php re_textbox($_SESSION['address']) ?>>
             </div>
           </p>
         </div>
@@ -222,11 +232,11 @@
       </div>
           <div class="in_form">
             <input type="textbox" name="phone1" size="1" pattern="\d{2,4}" maxlength="4" placeholder="03"
-            <?php textset($_SESSION['phone1']) ?> >
+            <?php re_textbox($_SESSION['phone1']) ?> >
             ( <input type="textbox" name="phone2" size="1" pattern="\d{3,4}" maxlength="4" placeholder="3286"
-            <?php textset($_SESSION['phone2']) ?> >
+            <?php re_textbox($_SESSION['phone2']) ?> >
             ) <input type="textbox" name="phone3" size="1" pattern="\d{3,4}" maxlength="4" placeholder="7887"
-            <?php textset($_SESSION['phone3']) ?> >
+            <?php re_textbox($_SESSION['phone3']) ?> >
           </div>
         </p>
       </div>
@@ -239,9 +249,9 @@
       </div></div>
           <div class="in_form">
             <input type="textbox" name="mail1" size="20" required placeholder="sample"
-            <?php textset($_SESSION['mail1']) ?> >
+            <?php re_textbox($_SESSION['mail1']) ?> >
             @ <input type="textbox" name="mail2" size="20" required placeholder="example.com"
-            <?php textset($_SESSION['mail2']) ?> >
+            <?php re_textbox($_SESSION['mail2']) ?> >
           </div>
         </p>
       </div>
@@ -276,15 +286,9 @@
             <div class="in_form">
               <select name="select" required>
                 <option value=0></option>
-                <option value=1
-                <?php if( isset($_SESSION['submit']) && $_SESSION['select'] == "select1"){
-                    echo "selected"; } ?> >いい子だねー</option>
-                <option value=2
-                <?php if( isset($_SESSION['submit']) && $_SESSION['select'] === "select2"){
-                    echo "selected"; } ?> >いい子でちゅね～</option>
-                <option value=3
-                <?php if( isset($_SESSION['submit']) && $_SESSION['select'] === "select3"){
-                    echo "selected"; } ?> >ｱｰ、ﾖｼﾖｼﾖｼ</option>
+                <option value=1 <?php re_select(1); ?> >いい子だねー</option>
+                <option value=2 <?php re_select(2); ?> >いい子でちゅね～</option>
+                <option value=3 <?php re_select(3); ?> >ｱｰ、ﾖｼﾖｼﾖｼ</option>
               </select>
             </div>
           <div class="to_float"></div>

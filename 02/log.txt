@@ -894,3 +894,141 @@ select  2
 textarea  22
 submit  押せっ・・・！
 flag  1
+---------------------------------
+name1  ８８８
+name2  ８８８
+sexual  1
+post1  111
+post2  1111
+address  
+phone1  11
+phone2  1111
+phone3  1111
+mail1  111
+mail2  111
+select  2
+textarea  11
+submit  押せっ・・・！
+flag  1
+---------------------------------
+name1  ８８８
+name2  ８８８
+sexual  2
+post1  111
+post2  1111
+address  
+phone1  
+phone2  
+phone3  
+mail1  111
+mail2  111
+0  0
+1  1
+2  2
+select  3
+textarea  11
+submit  押せっ・・・！
+flag  1
+---------------------------------
+name1  ８８８
+name2  ８８８
+sexual  2
+post1  111
+post2  1111
+address  
+phone1  
+phone2  
+phone3  
+mail1  111
+mail2  111
+0  0
+1  1
+2  2
+select  3
+textarea  11
+submit  押せっ・・・！
+flag  1
+---------------------------------
+name1  １１１
+name2  １１１
+sexual  0
+post1  
+post2  
+address  
+phone1  
+phone2  
+phone3  
+mail1  222
+mail2  222
+0  0
+1  1
+select  2
+textarea  22
+submit  押せっ・・・！
+flag  1
+---------------------------------
+name1  １１１
+name2  １１１
+sexual  0
+post1  
+post2  
+address  
+phone1  11
+phone2  1111
+phone3  1111
+mail1  222
+mail2  222
+0  0
+1  1
+select  2
+textarea  22
+submit  押せっ・・・！
+flag  1
+---------------------------------
+name1  111
+name2  2222
+sexual  0
+post1  111
+post2  1111
+address  
+phone1  
+phone2  
+phone3  
+mail1  qqw
+mail2  qdw
+select  1
+textarea  sdsd
+submit  押せっ・・・！
+flag  1
+---------------------------------
+name1  111
+name2  1111
+sexual  1
+post1  
+post2  
+address  
+phone1  
+phone2  
+phone3  
+mail1  11111
+mail2  11111
+select  1
+textarea  111
+submit  押せっ・・・！
+flag  1
+---------------------------------
+name1  111
+name2  1111
+sexual  1
+post1  
+post2  
+address  
+phone1  
+phone2  
+phone3  
+mail1  11111
+mail2  11111
+select  1
+textarea  111
+submit  押せっ・・・！
+flag  1
