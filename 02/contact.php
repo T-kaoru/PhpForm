@@ -9,10 +9,11 @@
 <body>
     <div id="body">
     <?php
-        //Noticeエラー回避
+        // Noticeエラー回避。if(isset)なんちゃらを大幅に省略できる。
         error_reporting(E_ALL & ~E_NOTICE);
 
         // サニタイジング処理。一括処理を目的とした再起処理関数。
+        // ついでに$_POSTから$_SESSIONに中身とキーを渡す。
         function sany($a){
             $_data = array();
             foreach ($a as $key => $value) {
@@ -25,36 +26,37 @@
             return $_data;
         }
 
-        //textbox用繰り返し表示関数
+        // textbox用繰り返し表示関数。
+        // ページが更新されても入力値を残す。
         function textset($a){
         if(isset($_SESSION['submit']) && strlen($a)){
                 echo "value=" . $a;
             }
         }
 
-        //エラーメッセージ用関数
-        function error_echo($a){
-            if(isset($_SESSION['submit'])){
-                echo '<div class="error_submsg">';
-                switch ($a) {
-                    case 1:
-                        echo '未入力の項目があります。';
-                        break;
-                    case 2:
-                        echo "不正な値です";
-                        break;
-                    case 3:
-                        echo "は？";
-                        break;
-                    default:
-                        break;
-                }
-                echo "</div>";
+        // エラーによる要素カラーペイント関数。
+        // 問題のある入力箇所はボーダーで囲われる。
+        function error_color($a){
+            if( is_numeric($a)){
+                echo 'id="color_paint"';
             }
         }
-        // 入力省略用関数
 
-        //エラーチェックとエラー文出力PHP。OKだったら通過できる。
+// ここまで関数定義。
+
+        // 項目名と要素名対応付け用配列。エラーメッセージ用。
+        $namelist = array(
+            'name' => 'お名前',
+            'sexual' => '性別',
+            'post' => '郵便番号、住所',
+            'address' => '住所',
+            'mail' => 'メール',
+            'phone' => '電話番号',
+            'select' => 'ご用件、ご意見'
+        );
+
+        // エラーチェックとエラー文出力PHP。OKだったら通過できる。
+        // ダメだったらerror_flgにビットが経つ。
         if( isset( $_POST['submit'] )){
             $error = array();
               $error_flg = 0;
@@ -70,9 +72,9 @@
               if(!strlen($_POST['mail1']) || !strlen($_POST['mail2'])){
                   $error['mail'] = 1;
               }
-            //   if(!preg_match("/^[a-zA-Z0-9_\.\-]+?$", $_POST['mail1']) || !preg_match("/^[a-zA-Z0-9_\.\-]+?$", $_POST['mail2'])){
-            //       $error['mail'] = 2;
-            //   }
+              if(!preg_match('/^([a-zA-Z0-9])+$/', $_POST['mail1']) || !preg_match('/^[a-zA-Z0-9_\.\-]+$/', $_POST['mail2'])){
+                  $error['mail'] = 3;
+              }
               // 郵便番号チェック
               if(strlen($_POST['post1']) || strlen($_POST['post2'])){
                   if(!strlen($_POST['post1'])){
@@ -95,7 +97,7 @@
               }
               //ご用件チェック
               if( $_POST['select'] == 0){
-                  $error['select'] = 1;
+                  $error['select'] = 2;
               }
 
               //エラーチェック判定。
@@ -117,25 +119,40 @@
               必須マーク付いてる部分は必ず入力しないと怒られます。
           </div>
           <?php
-                if ( isset( $_POST['submit'] ) ){
-                    session_start();
-                    $_SESSION = sany($_POST);
-                    if ($error_flg === 0){
-                        header("Location: ./result.php");
-                        exit;
-                    }else{
-                        echo '<div class="error_msg">';
-                        echo "未入力、または入力に誤りがある項目があります！";
-                        echo '</div>';
-                    }
+          if ( isset( $_POST['submit'] ) ){
+            session_start();
+            $_SESSION = sany($_POST);
+            if ($error_flg === 0){
+                header("Location: ./result.php");
+                exit;
+            }else{
+                echo '<div class="error_msg">';
+                echo "未入力、または入力に誤りがある項目があります！";
+                foreach ($error as $key => $value) {
+                    switch ($value) {
+                        case 1:
+                            echo "<li>" . $namelist[$key] . "の項目が未入力です。</li>";
+                            break;
+                        case 2:
+                            echo "<li>" . $namelist[$key] . "の項目が選択されていません。</li>";
+                            break;
+                        case 3:
+                            echo "<li>" . $namelist[$key] . "の項目に誤りがあります。</li>";
+                            break;
+                        default:
+                            break;
+                     }
                 }
-             ?>
+                echo '</div>';
+            }
+          }
+          ?>
         </p>
     </div>
 
 <!--名前入力フォーム  -->
     <form action="contact.php" method="post">
-      <div class="form">
+      <div class="form" <?php error_color($error['name']); ?>>
         <p>
           <div class="sub_title">お名前<span class="cns">必須</span>
           <div class="desc">姓の欄に苗字、名の欄に名前を記入して下さい。</div>
@@ -152,7 +169,7 @@
       </div>
 
   <!-- 性別入力フォーム -->
-      <div class="form">
+      <div class="form" <?php error_color($error['sexual']); ?>>
         <p>
           <div class="sub_title">性別<span class="cns">必須</span>
           <div class="desc">性別に違和感のある方などは「不明」を選択して下さい。</div>
@@ -163,21 +180,16 @@
             echo "checked"; } ?> /><label for="sexual1">:男性</lavel>
             <input type="radio" name="sexual" id="sexual2" value=1
             <?php if( isset($_SESSION['submit']) && $_SESSION['sexual'] == 1){
-            echo "checked"; } ?> /><label for="sexual2">:女</lavel>
+            echo "checked"; } ?> /><label for="sexual2">:女性</lavel>
             <input type="radio" name="sexual" id="sexual3" value=2
             <?php if( isset($_SESSION['submit']) && $_SESSION['sexual'] == 2){
             echo "checked"; } ?> /><label for="sexual3">:不明</lavel>
-                <?php
-                    if( isset($_POST['submit']) && !strlen($_POST['name2'])){
-                        echo "両性だった？";
-                    }
-                ?>
           </div>
         </p>
       </div>
 
       <!-- 住所入力フォーム  -->
-      <div class="form">
+      <div class="form" <?php error_color($error['post']); ?> >
         <p>
           <div class="sub_title">郵便番号</br>
           <div class="desc">3ケタ、4ケタの数字をそれぞれ入力してください。</div></div>
@@ -202,7 +214,7 @@
     </div>
 
       <!-- 電話番号入力フォーム  -->
-      <div class="form">
+      <div class="form" <?php error_color($error['phone']); ?>>
         <p>
           <div class="sub_title">電話番号
           <div class="desc">適切なケタ数の数字のみで入力してください。
@@ -220,7 +232,7 @@
       </div>
 
       <!-- メールアドレス入力フォーム  -->
-      <div class="form">
+      <div class="form" <?php error_color($error['mail']); ?>>
         <p>
           <div class="sub_title">メールアドレス<span class="cns">必須</span>
           <div class="desc">@(あっとまーく)区切りでご記入下さい。
@@ -235,7 +247,7 @@
       </div>
 
       <!-- クレーム内容入力フォーム  -->
-      <div class="form">
+      <div class="form" id="check">
         <p>
           <div class="sub_title">ご不満など
           <div class="desc">当てはまるものを選択してください。</div>
@@ -256,7 +268,7 @@
       </div>
 
       <!-- 質問カテゴリ入力フォーム  -->
-      <div class="form">
+      <div class="form" <?php error_color($error['select']); ?>>
           <p>
             <div class="sub_title">ご用件<span class="cns">必須</span>
             <div class="desc">用件の内容を選択して下さい。</div>

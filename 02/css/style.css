@@ -40,6 +40,12 @@ body {
     border-top: 1px dotted #DDDDDD;
 }
 
+#color_paint {
+    background-color: #fff9f5;
+    border-style: outset;
+    border-width: thick;
+}
+
 #title {
     text-align: center;
     border-bottom: 8px groove #bbdd77;
@@ -102,7 +108,9 @@ body {
     margin: 10px;
     border-left: dotted #779933 2px;
     padding: 5px;
+    list-style-type: circle;
     padding-left: 10px;
+
 }
 
 .error_submsg {

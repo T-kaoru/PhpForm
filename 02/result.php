@@ -28,7 +28,7 @@
         }
 
         $data = sany($_SESSION);
-
+        var_dump($data);
         //
         $val = array(
             'sexual' => array(
@@ -80,9 +80,6 @@
       </div>
 
       <!-- 住所入力フォーム  -->
-      <?php
-        if( strlen($data['post1'])){
-        ?>
       <div class="form">
         <p>
           <div class="sub_title">ご住所</div>
@@ -93,55 +90,56 @@
           </div>
         </p>
       </div>
-      <?php
-    }
-    ?>
 
       <!-- 電話番号入力フォーム  -->
-      <?php
-        if( strlen($data['phone1'])){
-        ?>
       <div class="form">
         <p>
           <div class="sub_title">電話番号</div>
           <div class="in_form">
-            <?php echo $data['phone1'] . "-" . $data['phone2'] . "-" . $data['phone3'] ?>
+            <?php
+            if( !empty($data['phone1'])){
+                echo $data['phone1'] . "-" . $data['phone2'] . "-" . $data['phone3'];
+            }else{
+                echo "(未記入)";
+            }
+             ?>
           </div>
         </p>
       </div>
-      <?php
-    }
-    ?>
 
       <!-- メールアドレス入力フォーム  -->
       <div class="form">
         <p>
           <div class="sub_title">メールアドレス</div>
           <div class="in_form">
-            <?php echo $data['mail1'] . "@" . $data['mail2'] ?>
+            <?php
+            if( !empty($data['mail1'])){
+                echo $data['mail1'] . "@" . $data['mail2'];
+            }else{
+                echo "(未記入)";
+            }
+            ?>
           </div>
         </p>
       </div>
 
       <!-- クレーム内容入力フォーム  -->
-      <?php
-        if( isset($data['box'])){
-        ?>
       <div class="form">
         <p>
           <div class="sub_title">ご不満など</div>
           <div class="in_form">
             <?php
+            if( !empty($data['box'])){
                 foreach ($data['box'] as $key => $value) {
                     echo "<li>" . $val['checkbox'][($value)] . "</li>";
-                 }
-                ?>
+                }
+            }else{
+                echo "(未選択)";
+            }
+            ?>
           </div>
         </p>
       </div>
-      <?php
-    }
-    ?>
 
       <!-- 質問カテゴリ入力フォーム  -->
       <div class="form">
