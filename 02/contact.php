@@ -31,13 +31,14 @@
                 echo "value=" . $a;
             }
         }
+
         //エラーメッセージ用関数
         function error_echo($a){
             if(isset($_SESSION['submit'])){
                 echo '<div class="error_submsg">';
                 switch ($a) {
                     case 1:
-                        echo '<style>background-color: #000000;</style>';
+                        echo '未入力の項目があります。';
                         break;
                     case 2:
                         echo "不正な値です";
@@ -69,6 +70,9 @@
               if(!strlen($_POST['mail1']) || !strlen($_POST['mail2'])){
                   $error['mail'] = 1;
               }
+            //   if(!preg_match("/^[a-zA-Z0-9_\.\-]+?$", $_POST['mail1']) || !preg_match("/^[a-zA-Z0-9_\.\-]+?$", $_POST['mail2'])){
+            //       $error['mail'] = 2;
+            //   }
               // 郵便番号チェック
               if(strlen($_POST['post1']) || strlen($_POST['post2'])){
                   if(!strlen($_POST['post1'])){
@@ -94,7 +98,6 @@
                   $error['select'] = 1;
               }
 
-              var_dump($error);
               //エラーチェック判定。
               foreach ($error as $key => $value) {
                   if ($value > 0){
@@ -103,6 +106,7 @@
                   }
               }
           }
+          var_dump($error);
      ?>
   <h1 id="title">お問い合わせ 入力フォーム</h1>
 
@@ -138,12 +142,10 @@
         </div>
           <div class="in_form">
             姓:<input type="textbox" name="name1" size="10" required placeholder="田中"
-            <?php if( isset($_SESSION['submit']) && strlen($_SESSION['name1'])){
-                echo "value=" . $_SESSION['name1']; } ?> >
+            <?php textset($_SESSION['name1']) ?> >
         </br>
             名:<input type="textbox" name="name2" size="10" required placeholder="太郎"
-            <?php if(isset($_SESSION['submit']) && strlen($_SESSION['name1'])){
-                echo "value=" . $_SESSION['name1']; } ?> >
+            <?php textset($_SESSION['name2']) ?> >
             <!-- メイ<input type="textbox" name="kana2" size="6" placeholder="タロウ"> -->
           </div>
         </p>
@@ -181,11 +183,9 @@
           <div class="desc">3ケタ、4ケタの数字をそれぞれ入力してください。</div></div>
           <div class="in_form">
             <input type="textbox" name="post1" size="1" pattern="\d{3}" maxlength="3" placeholder="100"
-            <?php if( isset($_SESSION['submit']) && strlen($_SESSION['post1'])){
-            echo "value=" . $_SESSION['post1']; } ?> >
+            <?php textset($_SESSION['post1']) ?> >
             - <input type="textbox" name="post2" size="1" pattern="\d{4}" maxlength="4" placeholder="0005"
-            <?php if( isset($_SESSION['submit']) && strlen($_SESSION['post2'])){
-            echo "value=" . $_SESSION['post2']; } ?> >
+            <?php textset($_SESSION['post2']) ?> >
           </div>
           <div class="nonline_form">
               <div class="to_float"></div>
@@ -195,8 +195,7 @@
               <div class="in_form">
                   <input type="textbox" name="address" size="65"
                   placeholder="東京都千代田区丸の内1-8-3 丸の内トラストタワー本館5階"
-                  <?php if( isset($_SESSION['submit']) && strlen($_SESSION['address'])){
-                      echo "value=" . $_SESSION['address']; } ?>>
+                  <?php textset($_SESSION['address']) ?>>
             </div>
           </p>
         </div>
@@ -204,22 +203,18 @@
 
       <!-- 電話番号入力フォーム  -->
       <div class="form">
-          <?php error_echo($error['phone']); ?>
         <p>
           <div class="sub_title">電話番号
           <div class="desc">適切なケタ数の数字のみで入力してください。
           </div>
       </div>
           <div class="in_form">
-            <input type="textbox" name="phone1" size="1" pattern="^([0-9]{2,4})$)" maxlength="4" placeholder="03"
-            <?php if( isset($_SESSION['submit']) && strlen($_SESSION['phone1'])){
-            echo "value=" . $_SESSION['phone1']; } ?>>
+            <input type="textbox" name="phone1" size="1" pattern="\d{2,4}" maxlength="4" placeholder="03"
+            <?php textset($_SESSION['phone1']) ?> >
             ( <input type="textbox" name="phone2" size="1" pattern="\d{3,4}" maxlength="4" placeholder="3286"
-            <?php if( isset($_SESSION['submit']) && strlen($_SESSION['phone2'])){
-            echo "value=" . $_SESSION['phone2']; } ?>>
+            <?php textset($_SESSION['phone2']) ?> >
             ) <input type="textbox" name="phone3" size="1" pattern="\d{3,4}" maxlength="4" placeholder="7887"
-            <?php if( isset($_SESSION['submit']) && strlen($_SESSION['phone3'])){
-            echo "value=" . $_SESSION['phone3']; } ?>>
+            <?php textset($_SESSION['phone3']) ?> >
           </div>
         </p>
       </div>
@@ -228,15 +223,13 @@
       <div class="form">
         <p>
           <div class="sub_title">メールアドレス<span class="cns">必須</span>
-          <div class="desc">@(あっとまーく)区切りでご記入下さい。</div>
-      </div>
+          <div class="desc">@(あっとまーく)区切りでご記入下さい。
+      </div></div>
           <div class="in_form">
             <input type="textbox" name="mail1" size="20" required placeholder="sample"
-            <?php if( isset($_SESSION['submit']) && strlen($_SESSION['mail1'])){
-            echo "value=" . $_SESSION['mail2']; } ?>>
+            <?php textset($_SESSION['mail1']) ?> >
             @ <input type="textbox" name="mail2" size="20" required placeholder="example.com"
-            <?php if( isset($_SESSION['submit']) && strlen($_SESSION['mail2'])){
-            echo "value=" . $_SESSION['mail2']; } ?>>
+            <?php textset($_SESSION['mail2']) ?> >
           </div>
         </p>
       </div>
@@ -272,13 +265,13 @@
               <select name="select" required>
                 <option value=0></option>
                 <option value=1
-                <?php if( isset($_SESSION['submit']) && ($_SESSION['select'] == "select1")){
+                <?php if( isset($_SESSION['submit']) && $_SESSION['select'] == "select1"){
                     echo "selected"; } ?> >いい子だねー</option>
                 <option value=2
-                <?php if( isset($_SESSION['submit']) && ($_SESSION['select'] === "select2")){
+                <?php if( isset($_SESSION['submit']) && $_SESSION['select'] === "select2"){
                     echo "selected"; } ?> >いい子でちゅね～</option>
                 <option value=3
-                <?php if( isset($_SESSION['submit']) && ($_SESSION['select'] === "select3")){
+                <?php if( isset($_SESSION['submit']) && $_SESSION['select'] === "select3"){
                     echo "selected"; } ?> >ｱｰ、ﾖｼﾖｼﾖｼ</option>
               </select>
             </div>

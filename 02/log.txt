@@ -1,0 +1,64 @@
+---------------------------------
+name1  qqq
+name2  qqq
+sexual  0
+post1  
+post2  
+address  
+phone1  
+phone2  
+phone3  
+mail1  qqq
+mail2  qqq
+select  2
+textarea  qqq
+submit  押せっ・・・！
+flag  1
+---------------------------------
+name1  qqq
+name2  qqq
+sexual  0
+post1  111
+post2  1111
+address  
+phone1  
+phone2  
+phone3  
+mail1  qqq
+mail2  qqq
+select  2
+textarea  qqq
+submit  押せっ・・・！
+flag  1
+---------------------------------
+name1  qqq
+name2  qqq
+sexual  0
+post1  111
+post2  1111
+address  
+phone1  
+phone2  
+phone3  
+mail1  qqq
+mail2  111
+select  3
+textarea  11111
+submit  押せっ・・・！
+flag  1
+---------------------------------
+name1  qqq
+name2  qqq
+sexual  0
+post1  111
+post2  1111
+address  
+phone1  
+phone2  
+phone3  
+mail1  qqq
+mail2  111
+select  3
+textarea  11111
+submit  押せっ・・・！
+flag  1
